@@ -15,6 +15,8 @@
 			code{white-space: pre}
 
 			.rest{color: gray}
+
+			p+ul,p:has(+ul){margin:0}
 		</style>
 	</head>
 	<body style="margin: 0">
@@ -225,37 +227,35 @@
 			register. For most binary operator instruction left operand is the accumulator register and right operand is the argument
 			register. Exception is <code>\</code> (inverted division), where the operator is traditional division and operands are swapped.
 		</p>
-		<p>Binary operator instructions:
-			<ul>
-				<li><code>+</code> - addition</li>
-				<li><code>-</code> - subtraction</li>
-				<li><code>*</code> - multiplication</li>
-				<li><code>/</code> - division</li>
-				<li><code>\</code> - inverted division</li>
-				<li><code>%</code> - modulo</li>
-				<li><code>&amp;</code> - bitwise AND</li>
-				<li><code>|</code> - bitwise OR</li>
-				<li><code>^</code> - bitwise XOR</li>
-				<li><code>&lt;</code> - less than</li>
-				<li><code>=</code> - equals</li>
-				<li><code>&gt;</code> - greater than</li>
-				<li><code>?</code> - random</li>
-				<li><code>M</code> - max</li>
-				<li><code>m</code> - min</li>
-			</ul>
-		</p>
+		<p>Binary operator instructions:</p>
+		<ul>
+			<li><code>+</code> - addition</li>
+			<li><code>-</code> - subtraction</li>
+			<li><code>*</code> - multiplication</li>
+			<li><code>/</code> - division</li>
+			<li><code>\</code> - inverted division</li>
+			<li><code>%</code> - modulo</li>
+			<li><code>&amp;</code> - bitwise AND</li>
+			<li><code>|</code> - bitwise OR</li>
+			<li><code>^</code> - bitwise XOR</li>
+			<li><code>&lt;</code> - less than</li>
+			<li><code>=</code> - equals</li>
+			<li><code>&gt;</code> - greater than</li>
+			<li><code>?</code> - random</li>
+			<li><code>M</code> - max</li>
+			<li><code>m</code> - min</li>
+		</ul>
 		<h2>Unary Operators</h2>
 		<p>Unary operators operate only on the accumulator register, it is the operand and the result is stored in it.</p>
-		<p>Unary operator instructions:
-			<ul>
-				<li><code>!</code> - logical NOT</li>
-				<li><code>~</code> - bitwise NOT</li>
-				<li><code>#</code> - popcount</li>
-				<li><code>:</code> - byte swap</li>
-				<li><code>s</code> - sinus</li>
-				<li><code>S</code> - sign extension</li>
-			</ul>
-		</p>
+		<p>Unary operator instructions:</p>
+		<ul>
+			<li><code>!</code> - logical NOT</li>
+			<li><code>~</code> - bitwise NOT</li>
+			<li><code>#</code> - popcount</li>
+			<li><code>:</code> - byte swap</li>
+			<li><code>s</code> - sinus</li>
+			<li><code>S</code> - sign extension</li>
+		</ul>
 		<h2>Control Flow</h2>
 		<p>
 			Control flow instructions changes the default execution process by change instruction pointer register or changing execution mode.
@@ -310,23 +310,23 @@
 			Memory is organized as a linear array of bytes. Instruction operating on memory uses 2 registers: data address register and
 			accumulator register. Data address register holds byte address. Accumulator register holds value to write or loaded value.
 			Memory instructions:
-			<ul>
-				<li><code>@</code> - loads value from memory</li>
-				<li><code>$</code> - writes value to memory</li>
-				<li><code>,</code> - pushes value to end of stack; it decrements data address register before writing</li>
-				<li><code>`</code> - pops value from end of stack; it increments data address register after reading</li>
-			</ul>
 		</p>
+		<ul>
+			<li><code>@</code> - loads value from memory</li>
+			<li><code>$</code> - writes value to memory</li>
+			<li><code>,</code> - pushes value to end of stack; it decrements data address register before writing</li>
+			<li><code>`</code> - pops value from end of stack; it increments data address register after reading</li>
+		</ul>
 		<h2>Input/Output</h2>
 		<p>
 			Input and output instructions uses 2 registers: port register and accumulator register. Port register holds index
 			of input/output register and accumulator register holds value to write or loaded value. Single port can store single byte
 			of data. Input/output instructions:
-			<ul>
-				<li><code>i</code> - loads value from port</li>
-				<li><code>o</code> - writes value into port</li>
-			</ul>
 		</p>
+		<ul>
+			<li><code>i</code> - loads value from port</li>
+			<li><code>o</code> - writes value into port</li>
+		</ul>
 		<h2>Screen</h2>
 		<p>
 			There is only one instruction to manipulate screen: <code>.</code>. It uses 5 registers: X, Z, R, G, B. Registers X and Z
@@ -335,23 +335,19 @@
 			of register B stores blue channel. Color is encoded in TrueColor format.
 		</p>
 		<h1>Execution modes</h1>
-		<p>
-			There are at least two execution modes:
-			<ul>
-				<li>Execution mode - fetch instructions pointed by instruction pointer register</li>
-				<li>Service mode - fetch instructions from service port</li>
-			</ul>
-		</p>
+		<p>There are at least two execution modes:</p>
+		<ul>
+			<li>Execution mode - fetch instructions pointed by instruction pointer register</li>
+			<li>Service mode - fetch instructions from service port</li>
+		</ul>
 		<p>Device starts in service mode, and switches to execution mode after receiving &#x2400; instruction.</p>
-		<p>
-			Mind that service mode changes effects of some instructions due lack of flow control. E.g. :
-			<ul>
-				<li><code>&#x2400;</code> - enters execution mode</li>
-				<li><code>J</code> - will not jump</li>
-				<li><code>}</code> - will not repeat code</li>
-				<li><code>)</code> - will not jump</li>
-			</ul>
-		</p>
+		<p>Mind that service mode changes effects of some instructions due lack of flow control. E.g. :</p>
+		<ul>
+			<li><code>&#x2400;</code> - enters execution mode</li>
+			<li><code>J</code> - will not jump</li>
+			<li><code>}</code> - will not repeat code</li>
+			<li><code>)</code> - will not jump</li>
+		</ul>
 		<h1>Registers</h1>
 		<p>Each register holds a 16 bits wide signed integer value in 2's complement representation.</p>
 		<table>
