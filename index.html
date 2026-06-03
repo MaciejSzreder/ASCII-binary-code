@@ -23,6 +23,12 @@
 				color: var(--light);
 			}
 
+			.logo{
+				height: 3cap;
+				image-rendering: pixelated;
+				vertical-align: -40%;
+			}
+
 			code{
 				white-space: pre
 			}
@@ -37,7 +43,7 @@
 		</style>
 	</head>
 	<body style="margin: 0">
-		<h1><img src="logo.png" alt="ABc logo" style="height:1cap; image-rendering: pixelated;vertical-align: baseline;" />ASCII bytecode - prototype</h1>
+		<h1><img src="logo.png" alt="ABc logo" class="logo" />ASCII bytecode - prototype</h1>
 		<p>The main idea is to use ASCII code points as bytecode.</p>
 		<h1>Interface</h1>
 		<canvas id="main"></canvas>
