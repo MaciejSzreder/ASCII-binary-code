@@ -46,6 +46,11 @@
 				text-shadow: 0 0 15px gray;
 			}
 
+			tr:hover .rest{
+				color: #202020;
+				text-shadow: 0 0 2px #202020;
+			}
+
 			p+ul, p:has(+ul){
 				margin:0
 			}
@@ -75,6 +80,20 @@
 
 			td:not(:first-child){
 				border-left: 1px solid var(--light);
+			}
+
+			tr:hover td{
+				background-color: var(--light);
+				color: var(--background);
+				text-shadow: 0 0 2px var(--background);
+			}
+
+			tr:hover td:not(:first-child){
+				border-left: 1px solid var(--background);
+			}
+
+			td:hover{
+				text-shadow: none;
 			}
 		</style>
 	</head>
