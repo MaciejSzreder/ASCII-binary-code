@@ -14,6 +14,10 @@ th:not(:first-child){
 	border-left: 3px solid var(--background-among-light);
 }
 
+table tr:nth-child(2):hover td{
+	background-image: linear-gradient(to bottom, var(--strong2), transparent 2px);
+}
+
 table tr:nth-child(odd) td{
 	background-color: var(--slight);
 }
