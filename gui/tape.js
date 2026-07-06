@@ -74,6 +74,12 @@ export default class Tape
 		this.source.value = tapeEncode([decoded], loop);
 	}
 
+	drag({absoluteMouse})
+	{
+		this.hitBox.x = absoluteMouse.x;
+		this.hitBox.y = absoluteMouse.y;
+	}
+
 	punchTape(canvas, values, loop, x)
 	{
 		const ctx = canvas.getContext?canvas.getContext`2d`:canvas;

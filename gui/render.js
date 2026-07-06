@@ -1,6 +1,8 @@
 import { HtmlId } from './utils.js';
 
 let objects = [];
+let draggedObject = null;
+let start;
 
 document.addEventListener('DOMContentLoaded', ()=>{
 	let canvas = HtmlId`main`;
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	});
 
 	requestAnimationFrame(function drawObjects(){
+		ctx.clearRect(0,0, canvas.width,canvas.height);
 		for(let object of objects){
 			ctx.translate(object?.hitBox?.x??0, object?.hitBox?.y??0);
 			let localMouse = {
@@ -44,7 +47,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
 					x: mouse.x - object.hitBox.x,
 					y: mouse.y - object.hitBox.y
 				};
-				object.click(localMouse);
+				if(start.x === mouse.x && start.y === mouse.y){
+					object.click(localMouse);
+				}
+				draggedObject = null;
+				start = null;
+			}
+		}
+	});
+
+	canvas.addEventListener('mousemove', (event)=>{
+		const rect = canvas.getBoundingClientRect();
+		const mouse = {
+			x: event.clientX - rect.left,
+			y: event.clientY - rect.top
+		};
+		
+		if(start?.x !== mouse.x && start?.y !== mouse.y){
+			draggedObject?.drag?.({absoluteMouse: mouse});
+		}
+	});
+
+	canvas.addEventListener('mousedown', (event)=>{
+		const rect = canvas.getBoundingClientRect();
+		const mouse = {
+			x: event.clientX - rect.left,
+			y: event.clientY - rect.top
+		};
+		start = mouse;
+		
+		for(let object of objects){
+			if(inRectangle(mouse, object.hitBox)){
+				draggedObject = object;
 			}
 		}
 	});
