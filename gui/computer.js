@@ -21,13 +21,15 @@ export default class Computer
 		this.machine = new Machine();
 		this.image = this.machine.image();
 
-		render(this.screen = new Screen(x+Computer.screenEdgeGap,y+Computer.screenEdgeGap, ()=>this.image));
-		render(this.button = new Button(
-			x+Computer.buttonEdgeGap,
-			y + this.image[0].length + Computer.buttonScreenGap + Computer.screenEdgeGap,
-			'▶',
-			()=>this.start()
-		));
+		this.components={
+			screen: new Screen(Computer.screenEdgeGap,Computer.screenEdgeGap, ()=>this.image),
+			button: new Button(
+				Computer.buttonEdgeGap,
+				this.image[0].length + Computer.buttonScreenGap + Computer.screenEdgeGap,
+				'▶',
+				()=>this.start()
+			)
+		};
 	}
 
 	draw(ctx)
@@ -36,7 +38,7 @@ export default class Computer
 			x: this.x,
 			y: this.y,
 			width: Computer.width,
-			height: this.button.hitBox.y - this.y + this.button.hitBox.height + Computer.buttonEdgeGap
+			height: this.components.button.hitBox.y + this.components.button.hitBox.height + Computer.buttonEdgeGap
 		}
 		ctx.strokeStyle = color.off;
 		ctx.strokeRect(0.5, 0.5, this.hitBox.width, this.hitBox.height);

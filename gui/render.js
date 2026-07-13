@@ -19,20 +19,27 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 	});
 
-	requestAnimationFrame(function drawObjects(){
+	requestAnimationFrame(function redrawObjects(){
+		ctx.resetTransform();
 		ctx.clearRect(0,0, canvas.width,canvas.height);
-		for(let object of objects){
-			ctx.translate(object?.hitBox?.x??0, object?.hitBox?.y??0);
-			let localMouse = {
-				x: mouse.x - (object?.hitBox?.x??0),
-				y: mouse.y - (object?.hitBox?.y??0),
-				isOver: inRectangle(mouse, object.hitBox)
+		function drawObjects(objects)
+		{
+			for(let [name, object] of Object.entries(objects)){
+				let backup = ctx.getTransform();
+				ctx.translate(object?.hitBox?.x??0, object?.hitBox?.y??0);
+				let localMouse = {
+					x: mouse.x - (object?.hitBox?.x??0),
+					y: mouse.y - (object?.hitBox?.y??0),
+					isOver: inRectangle(mouse, object.hitBox)
+				}
+				ctx.lineWidth = 1;
+				object.draw?.(ctx, {mouse: localMouse});
+				drawObjects(object.components??[]);
+				ctx.setTransform(backup);
 			}
-			ctx.lineWidth = 1;
-			object.draw?.(ctx, {mouse: localMouse});
-			ctx.resetTransform();
 		}
-		requestAnimationFrame(drawObjects);
+		drawObjects(objects);
+		requestAnimationFrame(redrawObjects);
 	});
 
 	canvas.addEventListener('click', (event)=>{
@@ -42,19 +49,24 @@ document.addEventListener('DOMContentLoaded', ()=>{
 			y: event.clientY - rect.top
 		};
 
-		for(let object of objects){
-			if(object.click && object.hitBox && inRectangle(mouse, object.hitBox)){
-				let localMouse = {
-					x: mouse.x - object.hitBox.x,
-					y: mouse.y - object.hitBox.y
-				};
-				if(start.x === mouse.x && start.y === mouse.y){
-					object.click(localMouse);
+		function clickObject(objects, mouse)
+		{
+			for(let [name, object] of Object.entries(objects)){
+				if(object.hitBox && inRectangle(mouse, object.hitBox)){
+					let localMouse = {
+						x: mouse.x - object.hitBox.x,
+						y: mouse.y - object.hitBox.y
+					};
+					object.click?.(localMouse);
+					clickObject(object.components??[], localMouse);
 				}
-				draggedObject = null;
-				start = null;
 			}
 		}
+		if(start.x === mouse.x && start.y === mouse.y){
+			clickObject(objects, mouse);
+		}
+		draggedObject = null;
+		start = null;
 	});
 
 	canvas.addEventListener('mousemove', (event)=>{
