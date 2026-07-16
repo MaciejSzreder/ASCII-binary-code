@@ -45,6 +45,12 @@ export default class Computer
 	
 	}
 
+	drag({absoluteMouse})
+	{
+		this.x = absoluteMouse.x;
+		this.y = absoluteMouse.y;
+	}
+
 	connectServiceInput(source)
 	{
 		this.serviceCode = source;
