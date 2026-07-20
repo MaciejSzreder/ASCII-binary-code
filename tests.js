@@ -3,6 +3,19 @@ config.truncateThreshold = 0;
 
 import Machine from './logic/machine.js';
 
+function codeString(code)
+{
+	if(code[0]!=='\n'){// not multiline string
+		return code;
+	}
+	return(
+		code
+		.replaceAll(code.match(/\n[ \t]*/)[0], '\n')    // remove indentation
+		.slice(1)	                                    // remove first new line
+		.replace(/\n$/,'')                              // remove last new line
+	);
+}
+
 function map(object, f)
 {
 	return Object.fromEntries(Object.entries(object).map(f))
@@ -15,28 +28,28 @@ function filter(object, f)
 
 function testExecutionOutput(code, steps, input, expectedOutput)
 {
-	let out = Machine.execute(code, steps, input).output;
+	let out = Machine.execute(codeString(code), steps, input).output;
 
 	expect(out).to.deep.equal(expectedOutput.map((port)=>port?.map((value)=>value & 255)))
 }
 
 function testExecutionOutputForInput(code, input, expectedOutput)
 {
-	let out = Machine.executeForInput(code, input).output;
+	let out = Machine.executeForInput(codeString(code), input).output;
 
 	expect(out).to.deep.equal(expectedOutput.map((port)=>port?.map((value)=>value & 255)))
 }
 
 function testExecutionOutputForSinglePass(code, input, expectedOutput)
 {
-	let out = Machine.executeForSinglePass(code, input).output;
+	let out = Machine.executeForSinglePass(codeString(code), input).output;
 
 	expect(out).to.deep.equal(expectedOutput.map((port)=>port?.map((value)=>value & 255)))
 }
 
 function testExecutionRegistersState(code, steps, input, expectedRegistersState)
 {
-	let registers = Machine.execute(code, steps, input).state.registers;
+	let registers = Machine.execute(codeString(code), steps, input).state.registers;
 
 	expect(registers).to.deep.equal(expectedRegistersState.map((expectedRegistersState, processor)=>({
 		...map(registers[processor], ([register, value])=>[
@@ -51,7 +64,7 @@ function testExecutionRegistersState(code, steps, input, expectedRegistersState)
 
 function testExecutionScreen(code, steps, expectedScreenState)
 {
-	let screen = Machine.execute(code, steps, []).state.screen;
+	let screen = Machine.execute(codeString(code), steps, []).state.screen;
 
 	expect(screen).to.deep.equal(
 		screen.map((pixels, row)=>pixels.map((pixel, column)=>
@@ -62,7 +75,7 @@ function testExecutionScreen(code, steps, expectedScreenState)
 
 function testServiceExecutionOutput(code, serviceCode, steps, input, expectedOutput)
 {
-	let out = Machine.execute(code, steps, input, serviceCode).output;
+	let out = Machine.execute(codeString(code), steps, input, serviceCode).output;
 
 	expect(out).to.deep.equal(expectedOutput.map((port)=>port?.map((value)=>value & 255)))
 }
@@ -671,7 +684,7 @@ describe('TIS-100',()=>{
 			_B_C; sum=0, count=0;
 				iAb+B; sum+=input;
 				_<Ac+C; count+=input>0;
-			_30*D_1-A_115*Ad+J; if input>0;
+			_23*D_1-A_98*Ad+J; if input>0;
 			bo
 			_1Pco
 			_P
@@ -855,8 +868,8 @@ describe('other', ()=>{
 				b
 				+Bo
 				+Ao
-			_7J
-			`, 285,
+			_5J
+			`, 146,
 			[],
 			[[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181]]
 		)
