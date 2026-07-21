@@ -3,6 +3,7 @@ import color from './colors.js';
 import render from './render.js';
 import Screen from './screen.js';
 import Button from './button.js';
+import Port from './port.js';
 
 import Machine from '../logic/machine.js';
 import { tapeIterator, tapeEncode } from '../logic/tape.js';
@@ -28,6 +29,10 @@ export default class Computer
 				this.image[0].length + Computer.buttonScreenGap + Computer.screenEdgeGap,
 				'▶',
 				()=>this.start()
+			),
+			servicePort: new Port(
+				(Computer.width-Port.width) / 2,
+				0
 			)
 		};
 	}
@@ -43,6 +48,11 @@ export default class Computer
 		ctx.strokeStyle = color.off;
 		ctx.strokeRect(0.5, 0.5, this.hitBox.width, this.hitBox.height);
 	
+	}
+
+	getCableJoinPoint()
+	{
+		return this.hitBox;
 	}
 
 	drag({absoluteMouse})

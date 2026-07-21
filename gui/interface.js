@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	computer.connectInput(inputTape.source);
 	computer.connectOutput(outputTape.source);
 
-	render(new Cable(serviceTape, computer));
+	render(new Cable(serviceTape, computer.components.servicePort));
 	render(new Cable(inputTape, computer));
 	render(new Cable(outputTape, computer));
 });

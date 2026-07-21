@@ -53,6 +53,11 @@ export default class Tape
 		}
 	}
 
+	getCableJoinPoint()
+	{
+		return this.hitBox;
+	}
+
 	click(mouse)
 	{
 		const cell = {

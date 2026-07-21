@@ -136,6 +136,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
 export default function render(object)
 {
 	objects.push(object);
+	buildTree(object);
+}
+
+function buildTree(object)
+{
+	if(object.components){
+		for(let [name, component] of Object.entries(object.components)){
+			component.container = object;
+			buildTree(component);
+		}
+	}
+}
+
+export function getAbsoluteHitBox(object)
+{
+	let hitBox = {...object.hitBox};
+	while(object.container){
+		object = object.container;
+		hitBox.x += object.hitBox.x;
+		hitBox.y += object.hitBox.y;
+	}
+	return hitBox;
 }
 
 function inRectangle(point, rectangle)

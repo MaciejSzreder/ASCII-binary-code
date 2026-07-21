@@ -13,11 +13,19 @@ export default class Cable
 
 	draw(ctx)
 	{
+		let sourceHitBoxMiddle = this.source.getCableJoinPoint?.();
+		let destinationHitBoxMiddle = this.destination.getCableJoinPoint?.();
 		ctx.strokeStyle = Cable.color;
 		ctx.lineWidth = Cable.width;
 		ctx.beginPath();
-		ctx.moveTo(this.source.hitBox.x, this.source.hitBox.y);
-		ctx.lineTo(this.destination.hitBox.x, this.destination.hitBox.y);
+		ctx.moveTo(
+			sourceHitBoxMiddle.x,
+			sourceHitBoxMiddle.y,
+		);
+		ctx.lineTo(
+			destinationHitBoxMiddle.x,
+			destinationHitBoxMiddle.y,
+		);
 		ctx.stroke();
 	}
 }
