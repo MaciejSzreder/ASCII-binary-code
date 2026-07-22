@@ -475,6 +475,9 @@ describe('arithmetic', ()=>{
 	it('<0/0 is smallest', ()=>{
 		testExecutionOutputForInput('iS/o', [[-1, -2, -3]], [[-32768, -32768, -32768]]);
 	});
+	it('smallest/-1 is greatest', ()=>{
+		testExecutionOutputForSinglePass('_1A_-A _32768/o:o', [], [[255,127]]);
+	});
 	it('division sign change', ()=>{
 		testExecutionOutputForInput('1A--A{i/o}', [[-3, -2, -1, 0, 1, 2, 3]], [[3, 2, 1, 0, -1, -2, -3]]);
 	});
@@ -489,6 +492,9 @@ describe('arithmetic', ()=>{
 	});
 	it('0\\<0 is smallest', ()=>{
 		testExecutionOutputForInput('iSA_\\o', [[-1, -2, -3]], [[-32768, -32768, -32768]]);
+	});
+	it('smallest\\smallest is greatest', ()=>{
+		testExecutionOutputForSinglePass('_1A_-B _32768A b\\o:o', [], [[255,127]]);
 	});
 	it('inverted division sign change', ()=>{
 		testExecutionOutputForInput('1A--B{iAb\\o}', [[-3, -2, -1, 0, 1, 2, 3]], [[3, 2, 1, 0, -1, -2, -3]]);

@@ -220,7 +220,7 @@ export default class Machine{
 					core.registers[0]/*accumulator*/ = -32768;
 				}
 			}else{
-				core.registers[0]/*accumulator*/ /= core.registers[1]/*argument*/;
+				core.registers[0]/*accumulator*/ = Math.min(core.registers[0]/*accumulator*//core.registers[1]/*argument*/, 32767);
 			}
 			++core.registers[3]/*instruction pointer*/;
 		},
@@ -419,7 +419,7 @@ export default class Machine{
 					core.registers[0]/*accumulator*/ = -32768;
 				}
 			}else{
-				core.registers[0]/*accumulator*/ = core.registers[1]/*argument*/ / core.registers[0]/*accumulator*/;
+				core.registers[0]/*accumulator*/ = Math.min(core.registers[1]/*argument*//core.registers[0]/*accumulator*/, 32767);
 			}
 			++core.registers[3]/*instruction pointer*/;
 		},
