@@ -185,6 +185,7 @@ export default class Machine{
 		},
 		41 /*)*/: (core, machine)=>{
 			machine.memory[(--core.registers[6]/*data address*/ + machine.memory.length) % machine.memory.length] = core.registers[3]/*instruction pointer*/+1;
+			machine.memory[(--core.registers[6]/*data address*/ + machine.memory.length) % machine.memory.length] = (core.registers[3]/*instruction pointer*/+1) >> 8;
 			core.registers[3]/*instruction pointer*/ = core.registers[0]/*accumulator*/;
 		},
 		42 /***/: (core)=>{

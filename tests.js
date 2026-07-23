@@ -166,7 +166,7 @@ describe('jumps', ()=>{
 		testExecutionOutput('_11YjJo1o1o_1ojJ',99 , [], [[1]])
 	});
 	it('function call push return address', ()=>{
-		testExecutionOutputForSinglePass('2)_`o', [], [[2]]);
+		testExecutionOutputForSinglePass('2)_`o`o', [], [[0,2]]);
 	});
 	it('function call jumps', ()=>{
 		testExecutionOutputForSinglePass('4)jJ_1o', [], [[1]]);
