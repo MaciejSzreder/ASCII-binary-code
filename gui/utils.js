@@ -15,3 +15,18 @@ export function normalizeNumber(number)
 {
 	return isFinite(number) ? number : 0;
 }
+
+export function getNumber(v)
+{
+	switch(typeof(v)){
+	case 'function':
+		try{
+			return v();
+		}catch(_){
+			return NaN;
+		}
+	case 'number':
+		return v;
+	}
+	throw 'not implemented';
+}

@@ -596,6 +596,11 @@ export default class Machine{
 		this.processID = setInterval(()=>this.step());
 	}
 
+	stop()
+	{
+		clearInterval(this.processID);
+	}
+
 	serviceInput(callback)
 	{
 		this.serviceInputCallback = callback;

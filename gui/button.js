@@ -1,4 +1,5 @@
 import color from './colors.js';
+import {getNumber} from './utils.js';
 
 export default class Button
 {
@@ -27,15 +28,15 @@ export default class Button
 			actualBoundingBoxDescent
 		} = ctx.measureText(this.content);
 		let hitBox = {
-			x: this.x,
-			y: this.y,
+			x: getNumber(this.x),
+			y: getNumber(this.y),
 			width: width,
 			height: actualBoundingBoxAscent+actualBoundingBoxDescent+2
 		};
 		ctx.fillStyle = this.buttonColor;
 		ctx.fillRect(0,0, hitBox.width,hitBox.height);
 		ctx.fillStyle = this.textColor;
-		ctx.fillText(this.content, 0,hitBox.height-3);
+		ctx.fillText(this.content, 0,hitBox.height-actualBoundingBoxDescent-1);
 
 		this.hitBox = hitBox;
 	}

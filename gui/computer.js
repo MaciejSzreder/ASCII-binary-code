@@ -13,6 +13,7 @@ export default class Computer
 	static screenEdgeGap = 10;
 	static buttonEdgeGap = Computer.screenEdgeGap;
 	static buttonScreenGap = Computer.buttonEdgeGap;
+	static buttonGap = Computer.buttonEdgeGap;
 	static width = (new Machine).image().length + 2*Computer.screenEdgeGap;
 
 	constructor(x,y)
@@ -24,11 +25,17 @@ export default class Computer
 
 		this.components={
 			screen: new Screen(Computer.screenEdgeGap,Computer.screenEdgeGap, ()=>this.image),
-			button: new Button(
+			start: new Button(
 				Computer.buttonEdgeGap,
 				this.image[0].length + Computer.buttonScreenGap + Computer.screenEdgeGap,
 				'▶',
 				()=>this.start()
+			),
+			stop: new Button(
+				()=>this.components.start.hitBox.x+this.components.start.hitBox.width + Computer.buttonGap,
+				this.image[0].length + Computer.buttonScreenGap + Computer.screenEdgeGap,
+				'⏹',
+				()=>this.stop()
 			),
 			servicePort: new Port(
 				(Computer.width-Port.width) / 2,
@@ -43,7 +50,7 @@ export default class Computer
 			x: this.x,
 			y: this.y,
 			width: Computer.width,
-			height: this.components.button.hitBox.y + this.components.button.hitBox.height + Computer.buttonEdgeGap
+			height: this.components.start.hitBox.y + this.components.start.hitBox.height + Computer.buttonEdgeGap
 		}
 		ctx.strokeStyle = color.off;
 		ctx.strokeRect(0.5, 0.5, this.hitBox.width, this.hitBox.height);
@@ -96,5 +103,10 @@ export default class Computer
 		this.machine.restart();
 
 		this.image = this.machine.image();
+	}
+
+	stop()
+	{
+		this.machine.stop();
 	}
 }
