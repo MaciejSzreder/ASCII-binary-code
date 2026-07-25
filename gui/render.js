@@ -1,4 +1,4 @@
-import { HtmlId } from './utils.js';
+import {HtmlId, getNumber} from './utils.js';
 
 let objects = [];
 let draggedObject = null;
@@ -26,10 +26,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		{
 			for(let [name, object] of Object.entries(objects)){
 				let backup = ctx.getTransform();
-				ctx.translate(object?.hitBox?.x??0, object?.hitBox?.y??0);
+				let hitBoxX = getNumber(object?.hitBox?.x);
+				let hitBoxY = getNumber(object?.hitBox?.y);
+				ctx.translate(hitBoxX, hitBoxY);
 				let localMouse = {
-					x: mouse.x - (object?.hitBox?.x??0),
-					y: mouse.y - (object?.hitBox?.y??0),
+					x: mouse.x - (hitBoxX),
+					y: mouse.y - (hitBoxY),
 					isOver: inRectangle(mouse, object.hitBox)
 				}
 				ctx.lineWidth = 1;
@@ -53,9 +55,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		{
 			for(let [name, object] of Object.entries(objects)){
 				if(object.hitBox && inRectangle(mouse, object.hitBox)){
+					let hitBoxX = getNumber(object.hitBox.x);
+					let hitBoxY = getNumber(object.hitBox.y);
 					let localMouse = {
-						x: mouse.x - object.hitBox.x,
-						y: mouse.y - object.hitBox.y
+						x: mouse.x - hitBoxX,
+						y: mouse.y - hitBoxY,
 					};
 					object.click?.(localMouse);
 					clickObject(object.components??[], localMouse);
@@ -151,11 +155,16 @@ function buildTree(object)
 
 export function getAbsoluteHitBox(object)
 {
-	let hitBox = {...object.hitBox};
+	let hitBox = {
+		x: getNumber(object.hitBox.x),
+		y: getNumber(object.hitBox.y),
+		width: getNumber(object.hitBox.width),
+		height: getNumber(object.hitBox.height),
+	};
 	while(object.container){
 		object = object.container;
-		hitBox.x += object.hitBox.x;
-		hitBox.y += object.hitBox.y;
+		hitBox.x += getNumber(object.hitBox.x);
+		hitBox.y += getNumber(object.hitBox.y);
 	}
 	return hitBox;
 }
@@ -163,8 +172,8 @@ export function getAbsoluteHitBox(object)
 function inRectangle(point, rectangle)
 {
 	return rectangle
-		&& rectangle.x <= point.x
-		&& point.x <= rectangle.x + rectangle.width
-		&& rectangle.y <= point.y
-		&& point.y <= rectangle.y + rectangle.height;
+		&& getNumber(rectangle.x) <= getNumber(point.x)
+		&& getNumber(point.x) <= getNumber(rectangle.x) + getNumber(rectangle.width)
+		&& getNumber(rectangle.y) <= getNumber(point.y)
+		&& getNumber(point.y) <= getNumber(rectangle.y) + getNumber(rectangle.height);
 }

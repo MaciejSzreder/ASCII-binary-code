@@ -27,6 +27,8 @@ export function getNumber(v)
 		}
 	case 'number':
 		return v;
+	case 'undefined':
+		return NaN;
 	}
 	throw 'not implemented';
 }

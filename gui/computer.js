@@ -1,12 +1,13 @@
 import color from './colors.js';
 
-import render from './render.js';
+import {getAbsoluteHitBox} from './render.js';
 import Screen from './screen.js';
 import Button from './button.js';
 import Port from './port.js';
 
 import Machine from '../logic/machine.js';
 import { tapeIterator, tapeEncode } from '../logic/tape.js';
+import {getNumber} from './utils.js';
 
 export default class Computer
 {
@@ -14,6 +15,8 @@ export default class Computer
 	static buttonEdgeGap = Computer.screenEdgeGap;
 	static buttonScreenGap = Computer.buttonEdgeGap;
 	static buttonGap = Computer.buttonEdgeGap;
+	static portGap = Computer.buttonGap;
+	static portEdgeGap = Computer.portGap;
 	static width = (new Machine).image().length + 2*Computer.screenEdgeGap;
 
 	constructor(x,y)
@@ -32,7 +35,9 @@ export default class Computer
 				()=>this.start()
 			),
 			stop: new Button(
-				()=>this.components.start.hitBox.x+this.components.start.hitBox.width + Computer.buttonGap,
+				()=>getNumber(this.components.start.hitBox.x)
+					+ getNumber(this.components.start.hitBox.width)
+					+ Computer.buttonGap,
 				this.image[0].length + Computer.buttonScreenGap + Computer.screenEdgeGap,
 				'⏹',
 				()=>this.stop()
@@ -40,7 +45,13 @@ export default class Computer
 			servicePort: new Port(
 				(Computer.width-Port.width) / 2,
 				0
-			)
+			),
+			port: new Port(
+				Computer.portEdgeGap,
+				()=> getNumber(this.components.start.hitBox.y)
+					+ getNumber(this.components.start.hitBox.height)
+					+ Computer.portGap
+			),
 		};
 	}
 
@@ -50,7 +61,7 @@ export default class Computer
 			x: this.x,
 			y: this.y,
 			width: Computer.width,
-			height: this.components.start.hitBox.y + this.components.start.hitBox.height + Computer.buttonEdgeGap
+			height: getNumber(this.components.port.hitBox.y) + getNumber(this.components.port.hitBox.height) + Computer.portEdgeGap
 		}
 		ctx.strokeStyle = color.off;
 		ctx.strokeRect(0.5, 0.5, this.hitBox.width, this.hitBox.height);
