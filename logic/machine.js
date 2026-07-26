@@ -89,10 +89,12 @@ export default class Machine{
 
 		inputs = Machine.makePortIterator(inputs);
 		
-		let outOfInput = false;
+		let sleepingCores = [];
 		machine.inputs((port)=>{
 			const data = inputs(port);
-			outOfInput = data == null;
+			if(data == null){
+				sleepingCores[machine.core]=true;
+			};
 			return data;
 		});
 		
@@ -101,7 +103,7 @@ export default class Machine{
 			machine.serviceInput(Machine.makeTapeIterator(serviceCode));
 		}
 
-		return {machine, output, outOfInput:()=>outOfInput};
+		return {machine, output, outOfInput:()=>sleepingCores.reduce((total)=>total+1, 0)===machine.cores.length};
 	}
 
 	static execute(code, steps, inputs=[], serviceCode)
