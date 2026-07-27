@@ -68,11 +68,6 @@ export default class Computer
 	
 	}
 
-	getCableJoinPoint()
-	{
-		return this.hitBox;
-	}
-
 	drag({absoluteMouse})
 	{
 		this.x = absoluteMouse.x;

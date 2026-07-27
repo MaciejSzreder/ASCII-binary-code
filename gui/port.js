@@ -1,6 +1,7 @@
 import color from './colors.js';
-import { getAbsoluteHitBox } from './render.js';
+import {default as render, getAbsoluteHitBox, nextClick} from './render.js';
 import { getBoxMiddle } from './utils.js';
+import Cable from './cable.js';
 
 export default class Port
 {
@@ -27,5 +28,15 @@ export default class Port
 	getCableJoinPoint()
 	{
 		return getBoxMiddle(getAbsoluteHitBox(this));
+	}
+
+	click()
+	{
+		nextClick(({object})=>{
+			if(object.getCableJoinPoint){
+				render(new Cable(this, object));
+			}
+			nextClick(null);
+		});
 	}
 }

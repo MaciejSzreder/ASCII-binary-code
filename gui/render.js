@@ -3,6 +3,7 @@ import {HtmlId, getNumber} from './utils.js';
 let objects = [];
 let draggedObject = null;
 let start;
+let nextClickAction;
 
 document.addEventListener('DOMContentLoaded', ()=>{
 	let canvas = HtmlId`main`;
@@ -61,7 +62,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 						x: mouse.x - hitBoxX,
 						y: mouse.y - hitBoxY,
 					};
-					object.click?.(localMouse);
+					if(nextClickAction){
+						nextClickAction({object});
+					}else{
+						object.click?.(localMouse);
+					}
 					clickObject(object.components??[], localMouse);
 				}
 			}
@@ -167,6 +172,11 @@ export function getAbsoluteHitBox(object)
 		hitBox.y += getNumber(object.hitBox.y);
 	}
 	return hitBox;
+}
+
+export function nextClick(action)
+{
+	nextClickAction = action;
 }
 
 function inRectangle(point, rectangle)
