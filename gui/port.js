@@ -17,6 +17,8 @@ export default class Port
 			width: Port.width,
 			height: Port.height
 		}
+		this.cable = {components:{}};
+		render(this.cable);
 	}
 
 	draw(ctx)
@@ -32,9 +34,10 @@ export default class Port
 
 	click()
 	{
+		delete this.cable.components.cable;
 		nextClick(({object})=>{
 			if(object.getCableJoinPoint){
-				render(new Cable(this, object));
+				this.cable.components.cable=new Cable(this,object);
 			}
 			nextClick(null);
 		});
