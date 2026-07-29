@@ -168,8 +168,8 @@ export function getAbsoluteHitBox(object)
 	};
 	while(object.container){
 		object = object.container;
-		hitBox.x += getNumber(object.hitBox.x);
-		hitBox.y += getNumber(object.hitBox.y);
+		hitBox.x += getNumber(object?.hitBox?.x??0);
+		hitBox.y += getNumber(object?.hitBox?.y??0);
 	}
 	return hitBox;
 }

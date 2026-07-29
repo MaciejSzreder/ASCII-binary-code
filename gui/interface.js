@@ -41,11 +41,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	render(computer = new Computer(positionClamp(2*Tape.width + 2*tapeGap, Computer.width, width), 0, ()=>image));
 	render(outputTape = new Tape("", positionClamp(2*Tape.width + tapeGap + 2*tapeComputerGap + Computer.width, Tape.width, width)));
 
-	computer.connectServiceInput(serviceTape.source);
-	computer.connectInput(inputTape.source);
 	computer.connectOutput(outputTape.source);
 
-	render(new Cable(serviceTape, computer.components.servicePort));
-	render(new Cable(inputTape, computer.components.port));
+	computer.components.servicePort.connect(serviceTape);
+	computer.components.port.connect(inputTape);
 	render(new Cable(outputTape, computer.components.port));
 });

@@ -44,13 +44,15 @@ export default class Computer
 			),
 			servicePort: new Port(
 				(Computer.width-Port.width) / 2,
-				0
+				0,
+				(object)=>this.connectServiceInput(object.source),
 			),
 			port: new Port(
 				Computer.portEdgeGap,
 				()=> getNumber(this.components.start.hitBox.y)
 					+ getNumber(this.components.start.hitBox.height)
-					+ Computer.portGap
+					+ Computer.portGap,
+				(object)=>this.connectInput(object.source),
 			),
 		};
 	}

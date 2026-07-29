@@ -9,7 +9,7 @@ export default class Port
 	static height = 10;
 	static color = color.light;
 
-	constructor(x,y)
+	constructor(x,y, connectAction)
 	{
 		this.hitBox={
 			x,
@@ -19,6 +19,7 @@ export default class Port
 		}
 		this.cable = {components:{}};
 		render(this.cable);
+		this.connectAction = connectAction;
 	}
 
 	draw(ctx)
@@ -37,9 +38,15 @@ export default class Port
 		delete this.cable.components.cable;
 		nextClick(({object})=>{
 			if(object.getCableJoinPoint){
-				this.cable.components.cable=new Cable(this,object);
+				this.connect(object);
 			}
 			nextClick(null);
 		});
+	}
+
+	connect(object)
+	{
+		this.cable.components.cable=new Cable(this,object);
+		this.connectAction(object);
 	}
 }
