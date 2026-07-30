@@ -2,12 +2,14 @@
 import Computer from './computer.js';
 import Tape from './tape.js';
 import Cable from './cable.js';
+import Keyboard from './keyboard.js';
 import { HtmlId } from './utils.js';
 
 const tapeGap = Tape.holeGap;
 const tapeComputerGap = tapeGap;
+const tapeKeyboardGap = tapeGap;
 
-export let serviceTape, inputTape, outputTape, computer;
+export let serviceTape, inputTape, outputTape, computer, keyboard;
 
 function positionClamp(position, width, max){
 	if(position < 0){
@@ -40,6 +42,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	));
 	render(computer = new Computer(positionClamp(2*Tape.width + 2*tapeGap, Computer.width, width), 0, ()=>image));
 	render(outputTape = new Tape("", positionClamp(2*Tape.width + tapeGap + 2*tapeComputerGap + Computer.width, Tape.width, width)));
+	render(keyboard = new Keyboard(positionClamp(3*Tape.width + tapeGap + 2*tapeComputerGap + Computer.width + tapeKeyboardGap, Tape.width, width),0));
 
 	computer.connectOutput(outputTape.source);
 
