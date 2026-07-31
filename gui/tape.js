@@ -1,6 +1,6 @@
 import color from './colors.js';
 
-import { tapeDecode, tapeEncode } from "../logic/tape.js";
+import {tapeDecode, tapeEncode, tapeIterator} from "../logic/tape.js";
 
 export default class Tape
 {
@@ -56,6 +56,11 @@ export default class Tape
 	getCableJoinPoint()
 	{
 		return this.hitBox;
+	}
+
+	getIterator()
+	{
+		return tapeIterator(this.source.value);
 	}
 
 	click(mouse)

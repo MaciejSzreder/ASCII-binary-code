@@ -6,7 +6,7 @@ import Button from './button.js';
 import Port from './port.js';
 
 import Machine from '../logic/machine.js';
-import { tapeIterator, tapeEncode } from '../logic/tape.js';
+import {tapeEncode} from '../logic/tape.js';
 import {getNumber} from './utils.js';
 
 export default class Computer
@@ -45,14 +45,14 @@ export default class Computer
 			servicePort: new Port(
 				(Computer.width-Port.width) / 2,
 				0,
-				(object)=>this.connectServiceInput(object.source),
+				(object)=>this.connectServiceInput(object),
 			),
 			port: new Port(
 				Computer.portEdgeGap,
 				()=> getNumber(this.components.start.hitBox.y)
 					+ getNumber(this.components.start.hitBox.height)
 					+ Computer.portGap,
-				(object)=>this.connectInput(object.source),
+				(object)=>this.connectInput(object),
 			),
 		};
 	}
@@ -93,13 +93,13 @@ export default class Computer
 
 	start()
 	{
-		let serviceCode = tapeIterator(this.serviceCode.value);
-		let input = tapeIterator(this.input.value);
+		let serviceCode = this.serviceCode.getIterator();
+		let input = this.input.getIterator();
 		
-		this.machine.inputs(Machine.makePortIterator((port)=>port==0?input():null));
+		this.machine.inputs((port)=>port==0?input():null);
 
 		this.machine.serviceMode();
-		this.machine.serviceInput(Machine.makeTapeIterator(serviceCode));
+		this.machine.serviceInput(serviceCode);
 
 		this.machine.outputs((port,value)=>{
 			if(port==0){

@@ -49,7 +49,7 @@ class Core{
 }
 
 export default class Machine{
-	static makeTapeIterator(source)
+	static secureInputIterator(source)
 	{
 		if(typeof source === 'function'){
 			return ()=>{
@@ -57,13 +57,13 @@ export default class Machine{
 				return data == null ? data : data&255;
 			};
 		}else if(Array.isArray(source)){
-			return Machine.makeTapeIterator(()=>source?.shift());
+			return Machine.secureInputIterator(()=>source?.shift());
 		}else if(typeof source === 'string'){
-			return Machine.makeTapeIterator([...source].map(char=>char.charCodeAt()))
+			return Machine.secureInputIterator([...source].map(char=>char.charCodeAt()))
 		}
 	}
 
-	static makePortIterator(source)
+	static securePortIterator(source)
 	{
 		if(typeof source === 'function'){
 			return port=>{
@@ -71,8 +71,8 @@ export default class Machine{
 				return data == null ? data : data&255;
 			}
 		}else if(Array.isArray(source)){
-			source = source.map(data=>Machine.makeTapeIterator(data));
-			return Machine.makePortIterator(port=>(source[port]??(()=>{}))());
+			source = source.map(data=>Machine.secureInputIterator(data));
+			return Machine.securePortIterator(port=>(source[port]??(()=>{}))());
 		}
 	}
 
@@ -87,7 +87,7 @@ export default class Machine{
 			output[port].push(data);
 		});
 
-		inputs = Machine.makePortIterator(inputs);
+		inputs = Machine.securePortIterator(inputs);
 		
 		let sleepingCores = [];
 		machine.inputs((port)=>{
@@ -100,7 +100,7 @@ export default class Machine{
 		
 		if(serviceCode){
 			machine.serviceMode();
-			machine.serviceInput(Machine.makeTapeIterator(serviceCode));
+			machine.serviceInput(Machine.secureInputIterator(serviceCode));
 		}
 
 		return {machine, output, outOfInput:()=>sleepingCores.reduce((total)=>total+1, 0)===machine.cores.length};
@@ -589,7 +589,7 @@ export default class Machine{
 
 	inputs(callback)
 	{
-		this.inputsCallback = callback;
+		this.inputsCallback = Machine.securePortIterator(callback);
 	}
 
 	restart()
@@ -605,7 +605,7 @@ export default class Machine{
 
 	serviceInput(callback)
 	{
-		this.serviceInputCallback = callback;
+		this.serviceInputCallback = Machine.secureInputIterator(callback);
 	}
 
 	serviceMode(enable=true)
