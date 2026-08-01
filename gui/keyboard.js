@@ -9,6 +9,8 @@ export default class Keyboard
 	{
 		this.x  = x;
 		this.y = y;
+
+		this.pressedKeys = [];
 	}
 
 	drag({absoluteMouse})
@@ -20,6 +22,18 @@ export default class Keyboard
 	getCableJoinPoint()
 	{
 		return this.hitBox;
+	}
+
+	getIterator()
+	{
+		return ()=>this.pressedKeys.pop();	
+	}
+
+	onKeyDown({character})
+	{
+		if(character){
+			this.pressedKeys.push(character.codePointAt());
+		}
 	}
 
 	draw(ctx)

@@ -140,6 +140,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
 		draggedObject = null;
 		start = null;
 	});
+
+	window.addEventListener('keydown', (event)=>{
+		for(let object of objects){
+			let character = event.key.length === 1 ? event.key : null;
+			object.onKeyDown?.({character});
+		}
+	});
 });
 
 export default function render(object)
