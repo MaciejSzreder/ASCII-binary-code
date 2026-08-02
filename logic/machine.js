@@ -1,6 +1,10 @@
 class Core{
 	registers
 	nest = 0;
+	source = 1;/*
+		1	memory
+		2	service input
+	*/
 	state = 1;/*
 		1	execution
 		2	comment
@@ -44,6 +48,7 @@ class Core{
 		let fork = new Core(this.registers);
 		fork.registers[3]/*instruction pointer*/ = this.registers[0]/*accumulator*/;
 		fork.state = this.state;
+		fork.mode = this.mode;
 		return fork;
 	}
 }
@@ -610,7 +615,7 @@ export default class Machine{
 
 	serviceMode(enable=true)
 	{
-		this.cores[0].state = enable ? 7/*service*/ : 1/*execution*/;
+		this.cores[0].source = enable ? 2/*service input*/ : 1/*execution*/;
 	}
 
 	run(steps)
@@ -622,7 +627,18 @@ export default class Machine{
 
 	step(){
 		let core = this.cores[this.core];
-		let codebyte = this.memory[core.registers[3]/*instruction pointer*/ % this.memory.length];
+		let codebyte;
+		if(core.source === 1/*memory*/){
+			codebyte = this.memory[core.registers[3]/*instruction pointer*/ % this.memory.length];
+		}else if(core.source === 2/*source input*/){
+			codebyte = this.serviceInputCallback();
+			if(codebyte == 0){
+				core.source = 1/*memory*/;
+				return;
+			}
+		}else{
+			throw Error('Unknown source ' + core.source + ' for core ' + this.core + '.');
+		}
 		switch(core.state){
 		case 1/*execution*/:
 			let instruction = Machine.instructions[codebyte];
@@ -677,19 +693,6 @@ export default class Machine{
 			}
 			--core.registers[3]/*instruction pointer*/;
 			break;
-		case 7/*service execution*/:{
-			codebyte = this.serviceInputCallback();
-			if(codebyte == 0){
-				core.state = 1/*execution*/;
-				break;
-			}
-			let instruction = Machine.instructions[codebyte];
-			if(!instruction){
-				throw Error('Unknown instruction "' + String.fromCharCode(this.memory[core.registers[3]/*instruction pointer*/]) + '" (code ' + this.memory[core.registers[3]/*instruction pointer*/] + ') at address ' + core.registers[3]/*instruction pointer*/ + ' in ' + String.fromCharCode(...this.memory) + '.');
-			}
-			instruction(core, this);
-			break;
-		}
 		}
 		this.core = (this.core + 1) % this.cores.length;
 	}
