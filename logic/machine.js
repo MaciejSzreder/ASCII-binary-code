@@ -636,6 +636,9 @@ export default class Machine{
 				core.source = 1/*memory*/;
 				return;
 			}
+			if(codebyte == null){
+				return;
+			}
 		}else{
 			throw Error('Unknown source ' + core.source + ' for core ' + this.core + '.');
 		}
