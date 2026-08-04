@@ -6,8 +6,14 @@ let start;
 let nextClickAction;
 
 document.addEventListener('DOMContentLoaded', ()=>{
+	let view = HtmlId`html`;
 	let canvas = HtmlId`main`;
 	let ctx = canvas.getContext`2d`;
+
+	window.addEventListener('resize', ()=>{
+		main.style.height = main.height = view.clientHeight;
+		main.style.width = main.width = view.clientWidth;
+	})
 
 	let mouse = {};
 
