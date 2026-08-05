@@ -5,6 +5,22 @@ let draggedObject = null;
 let start;
 let nextClickAction;
 
+
+let softwareKeyboardTriggerElement = document.createElement`input`;
+{
+	softwareKeyboardTriggerElement.style.position = 'absolute';
+
+	softwareKeyboardTriggerElement.style.opacity = 0;
+
+	softwareKeyboardTriggerElement.style.clipPath = 'inset(50%)';
+
+	softwareKeyboardTriggerElement.style.height = 0;
+	softwareKeyboardTriggerElement.style.width = 0;
+	softwareKeyboardTriggerElement.style.padding = 0;
+	softwareKeyboardTriggerElement.style.margin = 0;
+	softwareKeyboardTriggerElement.style.border = 0;
+}
+
 document.addEventListener('DOMContentLoaded', ()=>{
 	let view = HtmlId`html`;
 	let canvas = HtmlId`main`;
@@ -153,6 +169,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 			object.onKeyDown?.({character});
 		}
 	});
+
+	canvas.parentNode.insertBefore(softwareKeyboardTriggerElement, canvas);
 });
 
 export default function render(object)
@@ -199,4 +217,9 @@ function inRectangle(point, rectangle)
 		&& getNumber(point.x) <= getNumber(rectangle.x) + getNumber(rectangle.width)
 		&& getNumber(rectangle.y) <= getNumber(point.y)
 		&& getNumber(point.y) <= getNumber(rectangle.y) + getNumber(rectangle.height);
+}
+
+export function showSoftKeyboard()
+{
+	softwareKeyboardTriggerElement.focus();
 }

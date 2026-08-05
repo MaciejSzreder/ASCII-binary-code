@@ -1,5 +1,6 @@
 import color from './colors.js';
 import {getNumber} from './utils.js';
+import {showSoftKeyboard} from './render.js';
 
 export default class Keyboard
 {
@@ -34,6 +35,11 @@ export default class Keyboard
 		if(character){
 			this.pressedKeys.push(character.codePointAt());
 		}
+	}
+
+	click()
+	{
+		showSoftKeyboard();
 	}
 
 	draw(ctx)
